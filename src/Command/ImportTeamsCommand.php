@@ -17,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Console\Input\InputArgument;
 
 #[AsCommand(
     name: 'app:import-teams',
@@ -47,6 +48,18 @@ class ImportTeamsCommand extends Command
     private OutputInterface $logger;
     private ValidatorInterface $validator;
 
+    // https://symfony.com/doc/current/console/input
+    protected function configure(): void
+    {
+        $this->addArgument(
+            'filename',
+            InputArgument::OPTIONAL,
+            'The filename inside the Assets folder',
+            'data.xlsx'
+        );
+    }
+
+
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->logger = $output;
@@ -54,15 +67,18 @@ class ImportTeamsCommand extends Command
             ->enableAttributeMapping()
             ->getValidator();
 
+        $filename = $input->getArgument('filename');
+        $assetPath = str_starts_with($filename, '/') ? $filename : '/' . $filename;
+
         $output->writeln([
             'Import Teams',
             '============',
             '',
         ]);
 
-        $asset = Asset::getByPath('/data.xlsx');
+        $asset = Asset::getByPath($assetPath);
         if (!$asset) {
-            $output->writeln('Error: Asset "data.xlsx" does not exist in assets directory!');
+            $output->writeln("Error: Asset '$filename' does not exist in assets directory!");
             return Command::INVALID;
         }
 
@@ -120,6 +136,7 @@ class ImportTeamsCommand extends Command
         return Command::SUCCESS;
     }
 
+    /** Retrieves a worksheet by name, or returns null if missing. */
     private function getSheet(string $sheetName, Spreadsheet $sheets): ?Worksheet
     {
         if (!$sheets->sheetNameExists($sheetName)) {
@@ -130,6 +147,7 @@ class ImportTeamsCommand extends Command
         return $sheets->getSheetByName($sheetName);
     }
 
+    /** Gets or creates a DataObject folder at the given path. */
     private function getObjectDirectory(string $path)
     {
         $dir = DataObject\Folder::getByPath($path);
@@ -143,6 +161,7 @@ class ImportTeamsCommand extends Command
         return $dir;
     }
 
+    /** Transforms raw excel row data into a validated TeamInput object. */
     private function transformTeamData(array $row): ?TeamInput
     {
         $input  = new TeamInput(
@@ -164,7 +183,7 @@ class ImportTeamsCommand extends Command
         return $input;
     }
 
-
+    /** Transforms raw excel row data into a validated PlayerInput object. */
     private function transformPlayerData(array $row): ?PlayerInput
     {
         $input = new PlayerInput(
@@ -184,12 +203,14 @@ class ImportTeamsCommand extends Command
         return $input;
     }
 
+    /** Logs a validation error message and returns null. */
     private function printValidationError(string $message): null
     {
         $this->logger->writeln("Error | Validation for row failed: $message");
         return null;
     }
 
+    /** Creates or updates a Team object based on the input data. */
     private function createOrUpdateTeam(TeamInput $data, $teamsDir)
     {
         $name = $data->name;
@@ -233,6 +254,7 @@ class ImportTeamsCommand extends Command
         return $team;
     }
 
+    /** Creates or updates a Player object and assigns it to a team. */
     private function createOrUpdatePlayer(PlayerInput $data, $playersDir, $processedTeams)
     {
         $playerQuery = new DataObject\Player\Listing();
@@ -267,6 +289,7 @@ class ImportTeamsCommand extends Command
         $player->setBirthday(Carbon::instance(SharedDate::excelToDateTimeObject($data->birthday)));
         $player->setPosition($data->position);
 
+        // check if teamId is present (since it is optional) and if there is a team with this id
         if (is_numeric($data->teamId) && !empty($processedTeams[$data->teamId])) {
             $team = $processedTeams[$data->teamId];
             $player->setTeam($team);
@@ -281,8 +304,10 @@ class ImportTeamsCommand extends Command
 
 
 // Validation classes
-// https://symfony.com/doc/current/validation
+// - https://symfony.com/doc/current/validation
+// - https://api-platform.com/docs/symfony/validation/
 
+/** Validation calss for team rows */
 class TeamInput
 {
     public function __construct(
@@ -318,6 +343,7 @@ class TeamInput
     ) {}
 }
 
+/** Validation class for player rows */
 class PlayerInput
 {
     public function __construct(
@@ -328,7 +354,7 @@ class PlayerInput
         #[Assert\NotBlank(message: "first name cannot be empty")]
         public ?string $firstName,
 
-        #[Assert\NotBlank(message: "second name cannot be empty")]
+        #[Assert\NotBlank(message: "last name cannot be empty")]
         public ?string $lastName,
 
         #[Assert\NotBlank(message: "player number cannot be empty")]
@@ -346,6 +372,7 @@ class PlayerInput
         public mixed $teamId
     ) {}
 
+    /** Concatinates `firstName` and `lastName` to one string */
     public function getFullName()
     {
         return $this->firstName . " " . $this->lastName;
