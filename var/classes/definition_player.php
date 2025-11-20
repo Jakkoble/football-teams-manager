@@ -6,7 +6,7 @@
  *
  * Fields Summary:
  * - firstName [input]
- * - secondName [input]
+ * - lastName [input]
  * - number [numeric]
  * - birthday [date]
  * - position [input]
@@ -20,7 +20,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'title' => '',
    'description' => '',
    'creationDate' => NULL,
-   'modificationDate' => 1763638661,
+   'modificationDate' => 1763676844,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -95,8 +95,8 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
           )),
           1 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
-             'name' => 'secondName',
-             'title' => 'Second name',
+             'name' => 'lastName',
+             'title' => 'Last name',
              'tooltip' => '',
              'mandatory' => true,
              'noteditable' => false,
