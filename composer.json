@@ -15,9 +15,10 @@
   "minimum-stability": "dev",
   "require": {
     "php": "~8.3.0 || ~8.4.0",
+    "phpoffice/phpspreadsheet": "^3.10",
+    "pimcore/admin-ui-classic-bundle": "*",
     "pimcore/pimcore": "^12.0",
     "pimcore/platform-version": "^2025.3",
-    "pimcore/admin-ui-classic-bundle": "*",
     "pimcore/quill-bundle": "*",
     "symfony/amqp-messenger": "^6.2 || ^7.2",
     "symfony/dotenv": "^6.2 || ^7.2",
