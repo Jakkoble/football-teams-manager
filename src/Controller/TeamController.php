@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TeamController extends FrontendController
 {
-    #[Route('/', name: 'team_overview', methods: ['GET'])]
+    #[Route('/', name: 'team_list', methods: ['GET'])]
     #[Template('team/list.html.twig')]
     public function listAction()
     {

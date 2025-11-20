@@ -30,6 +30,12 @@ h2 {
     padding-block-end: .5rem;
 }
 
+h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding-block-end: .5rem;
+}
+
 main {
     max-width: 50rem;
     padding-inline: 4rem;
@@ -42,6 +48,7 @@ ul {
     display: grid;
     grid-template-columns: auto 1fr auto;
     gap: 1rem;
+    margin-block-start: .8rem;
     padding-bottom: 5rem;
 
     li {
@@ -53,22 +60,41 @@ ul {
         padding: 1.5rem 2rem;
         border-radius: 1rem;
 
-        a {
-            text-decoration: none;
-            padding: .5rem;
-            display: flex;
-            align-items: center;
-            gap: .8rem;
-            font-weight: 500;
+    }
+}
 
-            &:any-link {
-                color: var(--primary);
-            }
+a {
+    text-decoration: none;
+    padding: .5rem;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    font-weight: 500;
 
-            svg {
-                fill: var(--primary);
-            }
-        }
+    &:any-link {
+        color: var(--primary);
+    }
+
+    svg {
+        fill: var(--primary);
+    }
+}
+
+#back {
+    padding: 0;
+
+    svg {
+        rotate: 180deg;
+    }
+}
+
+#back+h1 {
+    margin-block-start: .8rem;
+}
+
+#player {
+    p+p {
+        margin-top: .5rem;
     }
 }
 
