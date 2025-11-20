@@ -37,6 +37,8 @@
                     <p>Position: {{ player.position }}</p>
                 </div>
             </li>
+        {% else %}
+            <p>Keine Spieler gefunden!</p>
         {% endfor %}
     </ul>
 {% endblock %}
