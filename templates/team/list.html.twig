@@ -6,9 +6,7 @@
     <ul>
         {% for row in rows %} 
             <li>
-                {% if row.team.logo %}
-                    {{ row.team.logo.thumbnail("team").html|raw }}
-                {% endif %}
+                {% include "team/_logo.html.twig" with { 'team': row.team } %}
                 <div>
                     <h2>{{ row.team.name }}</h2>
                     <p>{{ row.playerCount }} Spieler</p> 

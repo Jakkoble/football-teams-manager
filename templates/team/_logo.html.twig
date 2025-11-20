@@ -1,0 +1,8 @@
+{% if team.logo %}
+    <div class="logo">
+        {{ team.logo.thumbnail("team").html|raw }}
+    </div>
+{% else %}
+    <img class="logo" src="{{ asset('images/placeholder.png') }}" alt=""> 
+{% endif %}
+
