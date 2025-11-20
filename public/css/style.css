@@ -96,8 +96,7 @@ a {
         rotate: 180deg;
     }
 
-    &+h1 {
-
+    &+* {
         margin-block-start: .8rem;
     }
 }
