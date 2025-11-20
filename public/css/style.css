@@ -86,15 +86,34 @@ a {
     svg {
         rotate: 180deg;
     }
+
+    &+h1 {
+
+        margin-block-start: .8rem;
+    }
 }
 
-#back+h1 {
-    margin-block-start: .8rem;
+svg {
+    flex-shrink: 0;
 }
 
 #player {
     p+p {
         margin-top: .5rem;
+    }
+}
+
+.detail {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    &+& {
+        margin-top: 0.5rem;
+    }
+
+    &:last-of-type {
+        padding-bottom: 2rem;
     }
 }
 
