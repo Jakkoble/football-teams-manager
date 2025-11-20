@@ -12,6 +12,7 @@
  * - founded [numeric]
  * - description [textarea]
  * - players [reverseObjectRelation]
+ * - coordinates [geopoint]
  */
 
 return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
@@ -21,7 +22,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'title' => '',
    'description' => '',
    'creationDate' => NULL,
-   'modificationDate' => 1763591495,
+   'modificationDate' => 1763638324,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -122,7 +123,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'name' => 'trainer',
              'title' => 'Trainer',
              'tooltip' => '',
-             'mandatory' => false,
+             'mandatory' => true,
              'noteditable' => false,
              'index' => false,
              'locked' => false,
@@ -152,7 +153,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'name' => 'location',
              'title' => 'Location',
              'tooltip' => '',
-             'mandatory' => false,
+             'mandatory' => true,
              'noteditable' => false,
              'index' => false,
              'locked' => false,
@@ -182,7 +183,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'name' => 'founded',
              'title' => 'Founded',
              'tooltip' => '',
-             'mandatory' => false,
+             'mandatory' => true,
              'noteditable' => false,
              'index' => false,
              'locked' => false,
@@ -212,7 +213,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'name' => 'description',
              'title' => 'Description',
              'tooltip' => '',
-             'mandatory' => false,
+             'mandatory' => true,
              'noteditable' => false,
              'index' => false,
              'locked' => false,
@@ -245,7 +246,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'permissions' => NULL,
              'fieldtype' => '',
              'relationType' => true,
-             'invisible' => false,
+             'invisible' => true,
              'visibleGridView' => false,
              'visibleSearch' => false,
              'blockedVarsForExport' => 
@@ -267,10 +268,36 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
             ),
              'width' => '',
              'height' => '',
-             'ownerClassName' => 'player',
-             'ownerClassId' => '2',
+             'ownerClassName' => 'team',
+             'ownerClassId' => '1',
              'ownerFieldName' => 'team',
              'lazyLoading' => true,
+          )),
+          7 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Geopoint::__set_state(array(
+             'name' => 'coordinates',
+             'title' => 'Coordinates',
+             'tooltip' => '',
+             'mandatory' => true,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'lat' => 0.0,
+             'lng' => 0.0,
+             'zoom' => 1,
+             'mapType' => 'roadmap',
+             'height' => 180,
+             'width' => '',
           )),
         ),
          'locked' => false,

@@ -1,0 +1,27 @@
+pimcore:
+    assets:
+        image:
+            thumbnails:
+                definitions:
+                    team:
+                        items:
+                            -
+                                method: scaleByHeight
+                                arguments:
+                                    height: 80
+                                    forceResize: true
+                        medias: {  }
+                        name: team
+                        description: ''
+                        group: ''
+                        format: SOURCE
+                        quality: 85
+                        highResolution: null
+                        preserveColor: false
+                        forceProcessICCProfiles: false
+                        preserveMetaData: false
+                        rasterizeSVG: false
+                        downloadable: false
+                        modificationDate: 1763636951
+                        creationDate: 1763636466
+                        preserveAnimation: false

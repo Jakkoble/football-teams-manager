@@ -1,10 +1,25 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    <h1>Teams</h1>
-    {% for row in rows %} 
-        <li>{{row.team.name }} hat {{row.playerCount}} Spieler! <a href="{{ path('team_detail', {id: row.team.id}) }}">Link</a></li>
-    {% else %}
-        <p>Kein Team gefunden!</p>
-    {% endfor %}
+    <h1>Fußballteams</h1>
+    <p>Hier werden alle Fußballteams aufgelistet. Klicke auf 'Details' um mehr zu erfahren.</p>  
+    <ul>
+        {% for row in rows %} 
+            <li>
+                {% if row.team.logo %}
+                    {{ row.team.logo.thumbnail("team").html|raw }}
+                {% endif %}
+                <div>
+                    <h2>{{ row.team.name }}</h2>
+                    <p>{{ row.playerCount }} Spieler</p> 
+                </div>
+                <a href="{{ path('team_detail', {id: row.team.id}) }}">
+                    Details 
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000"><path d="M579-480 285-774q-15-15-14.5-35.5T286-845q15-15 35.5-15t35.5 15l307 308q12 12 18 27t6 30q0 15-6 30t-18 27L356-115q-15 15-35 14.5T286-116q-15-15-15-35.5t15-35.5l293-293Z"/></svg> 
+                </a>
+            </li>
+        {% else %}
+            <li>Kein Team gefunden!</li>
+        {% endfor %}
+    </ul>
 {% endblock %}
