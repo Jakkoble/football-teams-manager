@@ -239,7 +239,7 @@ class ImportTeamsCommand extends Command
 
         // fetch logo if path is present
         if (!empty($data->logoPath)) {
-            $logoPath = $data->logoPath;
+            $logoPath = str_starts_with($data->logoPath, '/') ? $data->logoPath : '/Logos/' . $data->logoPath;
             $logo = Asset::getByPath($logoPath);
             if ($logo instanceof Asset\Image)
                 $team->setLogo($logo);
