@@ -3,7 +3,7 @@
 {% block content %}
     <h1>Teams</h1>
     {% for row in rows %} 
-        <li>{{row.team.name }} hat {{row.playerCount}} Spieler!</li>
+        <li>{{row.team.name }} hat {{row.playerCount}} Spieler! <a href="{{ path('team_detail', {id: row.team.id}) }}">Link</a></li>
     {% else %}
         <p>Kein Team gefunden!</p>
     {% endfor %}
