@@ -1,67 +1,68 @@
-# Pimcore Project Skeleton 
+# Soccerteams Challenge
+This repo is a pimcore recruitment challenge and has no real world use case!
+Demo: <a href="https://soccer.jakob.foo" target="_blank">https://soccer.jakob.foo</a>
 
-This skeleton should be used by experienced Pimcore developers for starting a new project from the ground up. 
-If you are new to Pimcore, it's better to start with our demo package, listed below 😉
+## Installation
+This installation process has been tested on a fresh Ubuntu 24.04.3 LTS installation. Linux environment is highly recommended!
 
-## Getting started
+### Requirements
+- local git installation
+- docker & docker compose installed
+
+### Guide
+1. Clone Repository: `git clone git@github.com:Jakkoble/football-teams-manager.git`
+2. `cd football-teams-manager`
+3. Set right permissions for environment: `sed -i "s|#user: '1000:1000'|user: '$(id -u):$(id -g)'|g" docker-compose.yaml`
+4. Start docker containers: `sudo docker compose up -d`
+
+⚠️ If you receive a warning that port 80 is already in use, you can choose a differnt one. For that run `sudo docker compose down` to stop all containers, open `docker-compose.yml` with you editor of choice and change the port for `nginx` from `"80:80"` to e. g. `"8080:80"`. Run `sudo docker compose up -d` again and the issue should be resolved. Note: From now on you application is only accessable under `http://localhost:8080` and the backend under `http://localhost:8080/admin`.
+
+5. Install dependencies: `sudo docker compose exec php composer install`
+
+This might result in an `pimcore.encryption.secret is not set` error, which is fine since this secret will be automatically set in the next steps.
+
+6. Create needed directories: `sudo docker compose exec php mkdir -p var/tmp var/log var/cache`
+7. Set permission for `var` directory: `sudo docker compose exec php chmod -R 777 var` (fine for local development environment)
+8. Start setup process: `docker compose exec php vendor/bin/pimcore-install`
+   1. Set admin user name
+   2. Set admin user password
+   3. Follow link for product key registration; make sure to select `Community Edition`
+   4. Open Link in Mails and copy the product key 
+   5. Paste Product key back in terminal
+   6. Press 2x `Enter`
+   7. Wait for setup completion
+9. App is accessable under <a href="http://localhost" target="_blank">http://localhost</a> and admin panel under <a href="http://localhost/admin" target="_blank">http://localhost/admin</a>
+
+## Fill with sample data
+In the `resources/` directory you can find mock assets you can use to test the `.xlsx` data import. Hint: names for files & directories are case-sensitive!
+1. Open admin panel and login:  <a href="http://localhost/admin" target="_blank">http://localhost/admin</a>
+2. Add `data.xlsx` file: Go to `Assets` > RC on `Home` > `Add Asset(s)` > `Upload Files` > select `data.xlsx` at `<project-root>/resources/data.xlsx`
+2. Create `Logos/` directory: Go to `Assets` > RC on `Home` > `Add Folder` > `Logos`
+3. Upload logos: Go to `Assets` > RC on `Logos` directory > `Add Asset(s)` > `Upload Files` > select all 4 logos at `<project-root>/resources/Logos` (one image is intentionally missing to showcase the placeholder logo)
+4. Run import script in terminal: `sudo docker compose exec php bin/console app:import-teams`
+6. See the results at <a href="http://localhost" target="_blank">http://localhost</a>
+
+## Excel Import CLI
+This projects comes shipped with an import CLI for `.xlsx` files to create teams and players Data Objects with just one command. 
+
+### Usage
+The format and layout for the Excel sheet is very strict, therefore I suggest to add/remove rows to <a href="https://raw.githubusercontent.com/jakkoble/football-teams-manager/main/resources/data.xlsx" target="_blank">this file</a>, but do not change colum order!
+
+#### File content
+There are two sheets in the file: `teams` and `players`
+and each sheet has some sample data added. If you want to add another team, simply create a new row with an ascending id (first colom). If you want to add players to this team, switch to the `players` sheet and also add new rows. Make sure to add the previously defined team id to the last column of each player. To use this file, upload it in the pimcore backend as an Assets.
+
+#### Team logo
+For the team logo you just need to upload it in the pimcore backend as an Asset in the `/Logos/` directory. (create if not exists) Then you can specify the name with file name extension in the `Logo` column inside the `teams` spreadsheet.
+
+### Run CLI
 ```bash
-COMPOSER_MEMORY_LIMIT=-1 composer create-project pimcore/skeleton my-project
-cd ./my-project
-./vendor/bin/pimcore-install
+sudo docker compose exec php bin/console app:import-teams
 ```
 
-- Point your virtual host to `my-project/public`
-- [Only for Apache] Create `my-project/public/.htaccess` according to https://pimcore.com/docs/platform/Pimcore/Installation_and_Upgrade/System_Setup_and_Hosting/Apache_Configuration/ 
-- Open https://your-host/admin in your browser
-- Done! 😎
+if you name you named your file different than `data.xlsx` you can specify the name like so:
+```bash
+sudo docker compose exec php bin/console app:import-teams myFile.xlsx
+```
+of cause you need to change `myFile.xlsx` to the actual filename. Its also possible to provide asubdirectory here. (e. g. `data/myFile.xlsx`)
 
-## Docker
-
-You can also use Docker to set up a new Pimcore Installation.
-You don't need to have a PHP environment with composer installed.
-
-### Prerequisites
-
-* Your user must be allowed to run docker commands (directly or via sudo).
-* You must have docker compose installed.
-* Your user must be allowed to change file permissions (directly or via sudo).
-
-### Follow these steps
-1. Initialize the skeleton project using the `pimcore/pimcore` image
-``docker run -u `id -u`:`id -g` --rm -v `pwd`:/var/www/html pimcore/pimcore:php8.3-latest composer create-project pimcore/skeleton my-project``
-
-2. Go to your new project
-`cd my-project/`
-
-3. Part of the new project is a docker compose file
-    * Run `sed -i "s|#user: '1000:1000'|user: '$(id -u):$(id -g)'|g" docker-compose.yaml` to set the correct user id and group id.
-    * Start the needed services with `docker compose up -d`
-
-4. Install pimcore and initialize the DB
-    `docker compose exec php vendor/bin/pimcore-install`
-    * When asked for admin user and password: Choose freely
-    * This can take a while, up to 20 minutes
-    * If you select to install the SimpleBackendSearchBundle please make sure to add the `pimcore_search_backend_message` to your `.docker/supervisord.conf` file inside value for 'command' like `pimcore_maintenance` already is.
-
-5. Run codeception tests:
-   * `docker compose run --user=root --rm test-php chown -R $(id -u):$(id -g) var/ public/var/`
-   * `docker compose run --rm test-php vendor/bin/pimcore-install -n`
-   * `docker compose run --rm test-php vendor/bin/codecept run -vv`
-
-6. :heavy_check_mark: DONE - You can now visit your pimcore instance:
-    * The frontend: <http://localhost>
-    * The admin interface, using the credentials you have chosen above:
-      <http://localhost/admin>
-
-## Pimcore Platform Version
-By default, Pimcore Platform Version is added as a dependency which ensures installation of compatible and in combination 
-with each other tested versions of additional Pimcore modules. More information about the Platform Version can be found in the 
-[Platform Version docs](https://github.com/pimcore/platform-version). 
-
-It might be necessary to update a specific Pimcore module to a version that is not included in the Platform Version.
-In that case, you need to remove the `platform-version` dependency from your `composer.json` and update the module to
-the desired version.
-Be aware that this might lead to a theoretically compatible but untested combination of Pimcore modules.
-
-## Other demo/skeleton packages
-- [Pimcore Basic Demo](https://github.com/pimcore/demo)
