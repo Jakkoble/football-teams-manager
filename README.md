@@ -64,5 +64,5 @@ if you name you named your file different than `data.xlsx` you can specify the n
 ```bash
 sudo docker compose exec php bin/console app:import-teams myFile.xlsx
 ```
-of cause you need to change `myFile.xlsx` to the actual filename. Its also possible to provide asubdirectory here. (e. g. `data/myFile.xlsx`)
+of cause you need to change `myFile.xlsx` to the actual filename. Its also possible to provide asubdirectory here. (e. g. `/data/myFile.xlsx`)
 
